@@ -31,4 +31,5 @@ int main() {
   /*-- Imprimir base -- */ {
     printf("  *****\n" );
   }
+  return 0;
 }
