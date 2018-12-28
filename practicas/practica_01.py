@@ -1,10 +1,10 @@
 '''
 /**************************************
-* NOMBRE: #Juan Antonio#
-* PRIMER APELLIDO: #Fernandez#
-* SEGUNDO APELLIDO: #Gonzalez#
-* DNI: #99999999#
-* EMAIL: #jantonio.gonzalez@mimail.com#
+* NOMBRE: #Jose Manuel#
+* PRIMER APELLIDO: #Alvarez#
+* SEGUNDO APELLIDO: #Bautista#
+* DNI: #29488955B#
+* EMAIL: #jalvarez1623@alumno.uned.es#
 ***************************************/
 '''
 nombre = "Juan Antonio"

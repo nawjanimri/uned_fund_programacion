@@ -6,9 +6,6 @@
 * EMAIL: #jalvarez1623@alumno.uned.es#
 ***************************************/
 
-/* ERROR EN ENERO 2340. EL MES DEBERÍA EMPEZAR EN LUNES Y NO EN MARTES, COMO IMPRIME EL CÓDIGO ACTUAL
-
-
 #include <stdio.h>
 #include <string.h>
 
@@ -21,17 +18,20 @@ const TipoMes meses = {"ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "J
 typedef int DiasMes[12];
 const DiasMes diasmensuales = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+/* Lee el dato del año solicitado al usuario */
 void LeerMes(){
   printf("¿Mes (1..12)?");
   scanf("%2d", &mes);
   mes = mes-1;
 }
 
+/* Lee el dato del año solicitado al usuario */
 void LeerAnno(){
   printf("¿Anno (1601...3000)?");
   scanf("%4d", &anno);
 }
 
+/* Informa si el año indicado es bisiesto o no*/
 int EsBisiesto(int anno){
   if (anno%4==0 && anno%100!=0 || anno%400==0){
     return 1;
@@ -40,17 +40,7 @@ int EsBisiesto(int anno){
   }
 }
 
-/* BORRARRRRR */
-/* Número de años bisiestos hasta el año indicado */
-int NumeroBisiestosHasta2(int anno){
-  int num_bisiestos = 0;
-  for (int i=1601; i<anno; i++){
-    num_bisiestos = num_bisiestos + EsBisiesto(i);
-  }
-  return num_bisiestos;
-}
-
-
+/* Devuelve el número de años bisiestos entre el año 1600 y el año especificado*/
 int NumeroBisiestosHasta(int anno){
   int annos;
   int num_bisiestos = 0;
@@ -66,52 +56,52 @@ int NumeroBisiestosHasta(int anno){
   cuatrocenas = int(annos/400);
   num_bisiestos = num_bisiestos+cuatrocenas;
 
-  /*
-  if (anno>2800){
-    num_bisiestos = num_bisiestos+3;
-  }
-  else if (anno>2400){
-    num_bisiestos = num_bisiestos+2;
-  }
-  else if (anno>2000){
-        num_bisiestos = num_bisiestos+1;
-  }
-  */
-
   return num_bisiestos;
+}
+
+int NumDiasMes(int mes, int anno){
+  if((mes==1)&&(EsBisiesto(anno))){
+      return diasmensuales[mes]+1; /* En febrero se comprueba si es año bisiesto, para añadir 1 día más*/
+  }
+  else{
+    return diasmensuales[mes];
+  }
+}
+
+/* Devuelve el número días de ese año hasta el día 1 del mes indicado */
+int NumDiasHastaMes(int mes, int anno){
+  int num_dias = 0; /* Número de días hasta el 1 del mes indicado. */
+
+  /* Si el año es bisiesto, se suma 1 sólo si el mes superior a febrero */
+  if (EsBisiesto(anno)){
+    num_dias = num_dias + NumeroBisiestosHasta(anno) - 1;
+  }
+  else{
+    num_dias = num_dias + NumeroBisiestosHasta(anno);
+  }
+
+  /* Se suman los días de todos los meses de ese año hasta el mes indicado */
+  for (int i=0; i<mes; i++){
+    num_dias = num_dias + NumDiasMes(i, anno); /* Se le suman los días del mes */
+  }
+  return num_dias;
 }
 
 /* Nombre del primer día del mes indicado */
 int DiaSemanaPrimerDiaDelMes(int mes, int anno){
   int annos;              /* Número de años desde 1601 hasta el año indicado. */
-  int dias_entre_annos;   /* Numero de días hasta el 1 de enero del año indicado. */
-  int dias_hasta_mes = 0; /* Número de días hasta el 1 del mes indicado. */
+  int num_dias = 0;       /* Número de días hasta el 1 del mes indicado. */
   int dia_semana;         /* Número del día de la semana en que cae el día 1 del mes indicado.*/
-
-  annos = anno - 1601;
-  dias_entre_annos = annos*365 + NumeroBisiestosHasta(anno);
-
-  /* Número días de ese año hasta el mes indicado */
-  for (int i=0; i<mes; i++){
-    if (i==1){                                      /* En febrero se comprueba si es año bisiesto */
-      if (EsBisiesto(anno)==1){
-        dias_hasta_mes = dias_hasta_mes+29;
-      }
-      else{
-        dias_hasta_mes = dias_hasta_mes+28;
-      }
-    }
-    else{
-      dias_hasta_mes = dias_hasta_mes + diasmensuales[i]; /* Se le suman los días del mes */
-    }
-  }
+                          /* 0 para lunes, 1 martes, 3 miércoles, etc.*/
 
   /* Teniendo en cuenta que el 1 de enero de 1601 fue lunes, dia 0*/
-  dias_hasta_mes = dias_entre_annos + dias_hasta_mes; /* Número de días hasta el mes indicado: */
-  dia_semana = dias_hasta_mes%7; /* Día de la semana del primer día de ese mes*/
+  annos      = anno - 1601;
+  num_dias   = annos*365 + NumDiasHastaMes(mes, anno);
+  dia_semana = num_dias%7; /* Día de la semana del primer día de ese mes*/
   return dia_semana;
 }
 
+/* Imprime el calendario del mes y año indicados */
 void ImprimeMes(int mes, int anno){
   int num_dias_mes;
   int dia_semana;
@@ -119,7 +109,7 @@ void ImprimeMes(int mes, int anno){
   int espacios;
 
   primerdia = DiaSemanaPrimerDiaDelMes(mes, anno);
-  num_dias_mes = diasmensuales[mes];
+  num_dias_mes = NumDiasMes(mes, anno);
 
   /* Cabecera del calendario */
   printf("%-10s             %4d\n", meses[mes], anno);
@@ -174,32 +164,11 @@ void ImprimeMes(int mes, int anno){
 /*=====================*/
 int main(){
 
-  int num_bisiestos;
-
   LeerMes();
   LeerAnno();
-  printf("\n");
 
-
-  /*
-  for (int i= 1601; i<1701; i++){
-    printf("Numero de bisiestos hasta %4d = %4d \n", i, NumeroBisiestosHasta(i));
-  }
-  */
-
-
-  if (anno>1600 && anno<3001){
+  if ((mes>=0 && mes<12)&&(anno>1600 && anno<3001)){
+    printf("\n");
     ImprimeMes(mes, anno);
   }
-
-
-  /*
-  for (int i = 1601; i<4000; i++){
-    for (int j=0; j<12; j++){
-      if ((i>1600)&&(i<3001)){
-        ImprimeMes(j, i);
-      }
-    }
-  }
-  */
 }

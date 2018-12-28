@@ -1,75 +1,91 @@
-import pdb
+'''
+/**************************************
+* NOMBRE: #Jose Manuel#
+* PRIMER APELLIDO: #Alvarez#
+* SEGUNDO APELLIDO: #Bautista#
+* DNI: #29488955B#
+* EMAIL: #jalvarez1623@alumno.uned.es#
+***************************************/
+'''
+lado = 0                            # Lado del rombo
+CARACTERES = "@.o.@.o.@.o.@.o.@.o." # caracteres del rombo
+n_espacios = 0                      # Número de espacios al inicio de cada línea del rombo */
+n_caracteres = 0                    # Número de caracteres que se imprimen en cada línea del rombo */
+
+def LeerLadoRombo():
+    
+    global lado
+    lado = int(input("¿Lado del rombo? "))
 
 
-def pinta_rombo(num_lados):
+def RomboSuperior():
+  
+    texto = ""                          # Texto que forma cada línea
+    global lado                         # Lado del rombo
+    n_lineas = lado                     # Número de líneas que forman cada parte del rombo
+    for linea in range(0, n_lineas):
 
-	print("pintando rombo")
-	
-	num_linea = 1
+        # Triángulo derecho
+        n_espacios   = lado-linea-1
+        n_caracteres = linea+1
 
-	while num_linea < num_lados+1:
+        # Espacios antes de los caracteres
+        for i in range(0, n_espacios):
+            texto += " "
 
-		linea = next_linea(num_linea, num_lados)
-		print(linea)
+        # Caracteres */
+        for j in range(0, n_caracteres):
+            texto += CARACTERES[j]
 
-		if len(linea) == 1:
-			break
+        #Triángulo izquierdo
+        # Caracteres:
+        for k in range(2, n_caracteres+1):
+            texto += CARACTERES[n_caracteres-k]
 
-		num_linea =  num_linea + 1
+        print(texto)
+        texto = ""
+
+def RomboInferior():
+    
+    texto = ""                          # Texto que forma cada línea
+    global lado                         # Lado del rombo
+    n_lineas = lado                     # Número de líneas que forman cada parte del rombo */
+    for linea in range(1, n_lineas):
+
+        # Triángulo derecho
+        n_espacios   = linea
+        n_caracteres = lado-linea
+
+        # Espacios antes de los caracteres
+        for i in range(0, n_espacios):
+            texto += " "
+        
+        # Caracteres */
+        for j in range(0, n_caracteres):
+           texto += CARACTERES[j]
+        
+        # Triángulo izquierdo
+        # Caracteres */
+        for k in range(2, n_caracteres+1):
+            texto += CARACTERES[n_caracteres-k]
+
+        print(texto)
+        texto = ""
 
 
-def next_linea(num_linea, num_lados):
+def imprime_rombo(num_lados):
 
-	secuencia = "@.o."
-	espacio = " "
-	
-	# print espacios:
-	num_espacios = num_lados - num_linea
-	texto_espacios = espacio * num_espacios
-
-	# print caracteres hasta el centro:
-	posicion = len(texto_espacios)
-	texto_caracteres = ""
-	caracter = ""
-
-	while posicion < num_lados:
-
-		caracter = next_caracter(caracter)
-		texto_caracteres += caracter
-		posicion += 1
-
-	return texto_espacios + texto_caracteres
-
-	# print invierte linea:
-
-def next_caracter(caracter_actual):
-
-	if caracter_actual == "":
-		return "@"
-	elif caracter_actual == "@":
-		return "."
-	elif caracter_actual ==".":
-		return "o"
-	elif caracter_actual == "o":
-		return "."
+    if num_lados>0 and num_lados<21:
+        RomboSuperior()
+        RomboInferior()
 
 
 if __name__ == "__main__":
 	
-	num_lados = ""
-	texto_num_lados_permitido = "El número de lados debe ser un número entre 1 y 20"
-
-	try:
-		num_lados = int(input("¿número de lados del rombo?"))
-
-		pdb.set_trace()
-
-		if num_lados is None or num_lados==0 or num_lados>20 or num_lados<0:
-			print(texto_num_lados_permitido)
-			print("{} no permitido".format(num_lados))
-		else:
-			pinta_rombo(num_lados)
-	except:
-		print(texto_num_lados_permitido)
+    #LeerLadoRombo()
+    
+    for i in range(0, 20):
+        lado = i
+        imprime_rombo(lado)
 
 
