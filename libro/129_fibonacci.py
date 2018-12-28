@@ -9,19 +9,10 @@ import sys
 COLUMNAS = 4 # Columnas a imprimir
 
 
-# Función para ver si un valor "k" es un número primo
-def EsPrimo(k):
-    
-    for d in range(2, k):
-        if(k%d == 0):
-            return False
-    return True
-
-
-def ImprimirTabulando(primos):
+def ImprimirTabulando(numeros):
     
     texto = ""
-    for p in primos:    
+    for p in numeros:    
         texto+="{:15d}".format(p)
     print(texto)
 
